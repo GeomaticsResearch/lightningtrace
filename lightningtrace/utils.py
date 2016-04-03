@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def seq(start, stop, step=1):
     """Generate a list of values between start and stop every step
     :param start: The starting value
@@ -12,6 +13,7 @@ def seq(start, stop, step=1):
         return [start + step * i for i in range(n + 1)]
     else:
         return []
+
 
 def subset_raster(rast, band=1, bbox=None, logger=None):
     """

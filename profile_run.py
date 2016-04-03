@@ -6,6 +6,7 @@ from lightningtrace.core import contour_dem, _contour_mpl_worker, _trace_mpl_con
 from lightningtrace.utils import seq
 from matplotlib import _cntr as cntr
 
+
 def test_func():
     dem_fp = 'data/be42124a2_fixed.img'
     bbox = (298955.40 - 1000, 128310.82 - 1000, 300842.31 + 1000, 129779.57 + 1000)
@@ -17,6 +18,7 @@ def test_func():
             contours.extend(list(
                 _contour_mpl_worker(rast, [contour_below_elev, ], band=1, bbox=bbox, logger=None)))
         return contours
+
 
 def test_func_optimized():
     dem_fp = 'data/be42124a2_fixed.img'
