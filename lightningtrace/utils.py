@@ -1,5 +1,5 @@
 import numpy as np
-
+from lightningtrace.transformations import world_to_pixel_coords
 
 def seq(start, stop, step=1):
     """Generate a list of values between start and stop every step
@@ -43,23 +43,23 @@ def subset_raster(rast, band=1, bbox=None, logger=None):
         # Restrict to the extent of the original raster if our requested
         # bbox is larger than the raster extent
         bbox = (
-            min([bbox[0], rast.bounds[0]]),  # Min X
-            min([bbox[1], rast.bounds[1]]),  # Min Y
-            min([bbox[2], rast.bounds[2]]),  # Max X
-            min([bbox[3], rast.bounds[3]]),  # Max Y
+           min([bbox[0], rast.bounds[0]]),  # Min X
+           min([bbox[1], rast.bounds[1]]),  # Min Y
+           min([bbox[2], rast.bounds[2]]),  # Max X
+           min([bbox[3], rast.bounds[3]]),  # Max Y
         )
 
         # Convert the bounding box (world coordinates) to pixel coordinates
         # window = ((row_start, row_stop), (col_start, col_stop))
-        window_minxy = reverse_affine * np.array((bbox[0], bbox[1]))
-        window_maxxy = reverse_affine * np.array((bbox[2], bbox[3]))
+        window_bl = world_to_pixel_coords(rast.affine, [(bbox[0], bbox[1]),])
+        window_tr = world_to_pixel_coords(rast.affine, [(bbox[2], bbox[3]),])
 
-        # TODO: This works for now but (int(window_maxxy[1]), int(window_minxy[1])) are reversed
-        # TODO: from what I would expect. Plotting confirms that this is correct. If you discover
-        # TODO: a bug related to windowing, this is a likely source.
+        window_rows = [int(window_tr[0, 1]), int(window_bl[0, 1])]
+        window_cols = [int(window_bl[0, 0]), int(window_tr[0, 0])]
+
         window = (
-            (int(window_maxxy[1]), int(window_minxy[1])),
-            (int(window_minxy[0]), int(window_maxxy[0])))
+            (min(window_rows), max(window_rows)),
+            (min(window_cols), max(window_cols)))
 
         del kwargs['affine']
         kwargs.update({
@@ -75,7 +75,7 @@ def subset_raster(rast, band=1, bbox=None, logger=None):
     rast_band = rast.read(band, window=window, masked=True)
     rast_a = kwargs['affine']
     return {
-        'rast': rast,
+        'crs': rast.crs,
         'array': rast_band,
         'affine': rast_a,
         'min': rast_band.min(),
