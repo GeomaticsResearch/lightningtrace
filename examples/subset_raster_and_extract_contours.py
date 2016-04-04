@@ -4,7 +4,7 @@ import rasterio
 import geopandas as gp
 
 # Open the raster
-with rasterio.open(os.path.join('data', 'dem.img'), 'r') as rast:
+with rasterio.open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'dem.img'), 'r') as rast:
     # Subset to only a portion of the raster given by a bounding box.
     subset = lightningtrace.utils.subset_raster(rast, 1, bbox=(299000, 128000, 300000, 129300))
 
