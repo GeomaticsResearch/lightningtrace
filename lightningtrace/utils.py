@@ -34,7 +34,7 @@ def subset_raster(rast, band=1, bbox=None, logger=None):
     kwargs = rast.meta.copy()
 
     # Read the band
-    if bbox:
+    if bbox is not None:
         bbox = list(bbox)
         if len(bbox) != 4:
             logger.error('BBOX is not of length 4. Should be (xmin, ymin, xmax, ymax)')
@@ -42,29 +42,42 @@ def subset_raster(rast, band=1, bbox=None, logger=None):
 
         # Restrict to the extent of the original raster if our requested
         # bbox is larger than the raster extent
-        bbox = (
-           min([bbox[0], rast.bounds[0]]),  # Min X
-           min([bbox[1], rast.bounds[1]]),  # Min Y
-           min([bbox[2], rast.bounds[2]]),  # Max X
-           min([bbox[3], rast.bounds[3]]),  # Max Y
-        )
+        min_x = bbox[0]
+        min_y = bbox[1]
+        max_x = bbox[2]
+        max_y = bbox[3]
+        if min_x < rast.bounds[0]:
+            min_x = rast.bounds[0]
+        if min_y < rast.bounds[1]:
+            min_y = rast.bounds[1]
+        if max_x > rast.bounds[2]:
+            max_x = rast.bounds[2]
+        if max_y > rast.bounds[3]:
+            max_y = rast.bounds[3]
+        bbox = (min_x, min_y, max_x, max_y)
 
         # Convert the bounding box (world coordinates) to pixel coordinates
         # window = ((row_start, row_stop), (col_start, col_stop))
         window_bl = world_to_pixel_coords(rast.affine, [(bbox[0], bbox[1]),])
         window_tr = world_to_pixel_coords(rast.affine, [(bbox[2], bbox[3]),])
 
-        window_rows = [int(window_tr[0, 1]), int(window_bl[0, 1])]
+        window_rows = [int(window_bl[0, 1]), int(window_tr[0, 1])]
         window_cols = [int(window_bl[0, 0]), int(window_tr[0, 0])]
 
         window = (
-            (min(window_rows), max(window_rows)),
-            (min(window_cols), max(window_cols)))
+          (min(window_rows), max(window_rows)),
+          (min(window_cols), max(window_cols)))
+        #window = (window_rows, window_cols)
+
+        print
+        print window[0]
+        print window[1]
+
 
         del kwargs['affine']
         kwargs.update({
-            'height': window[0][1] - window[0][0],
-            'width': window[1][1] - window[1][0],
+            'height': abs(window[0][1] - window[0][0]),
+            'width': abs(window[1][1] - window[1][0]),
             'affine': rast.window_transform(window)
         })
 
