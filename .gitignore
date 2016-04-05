@@ -29,3 +29,5 @@ Temporary Items
 .apdisk
 .cache
 *.qgs
+build/
+dist/
