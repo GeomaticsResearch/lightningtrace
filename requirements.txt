@@ -1,5 +1,0 @@
-shapely
-fiona
-rasterio
-matplotlib
-pytest
