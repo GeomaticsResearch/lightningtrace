@@ -1,6 +1,9 @@
 # lightningtrace
 Quickly contour a digital elevation model (DEM) using rasterio and matplotlib.
 
+## Install
+Just use pip.
+`pip install lightningtrace`
 
 ## Example
 The following example generates contours from the DEM at specified elevations. The `extract_contours()` function is a generator that yields GeoJSON features.
