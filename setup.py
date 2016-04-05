@@ -6,7 +6,7 @@ except ImportError:
 config = {
     'description': 'Quickly contour a digital elevation model using rasterio and matplotlib',
     'author': 'Michael Ewald / GeomaticsResearch LLC',
-    'url': 'URL to get it at.',
+    'url': 'https://github.com/GeomaticsResearch/lightningtrace',
     'download_url': 'Where to download it.',
     'author_email': 'mewald@geomaticsresearch.com',
     'version': '0.1',
