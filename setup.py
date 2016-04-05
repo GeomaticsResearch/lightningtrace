@@ -10,7 +10,7 @@ config = {
     'download_url': 'Where to download it.',
     'author_email': 'mewald@geomaticsresearch.com',
     'version': '0.1',
-    'install_requires': ['pytest', 'rasterio', 'fiona', 'matplotlib'],
+    'install_requires': ['pytest', 'rasterio', 'fiona', 'matplotlib', 'shapely'],
     'packages': ['lightningtrace'],
     'scripts': [],
     'name': 'lightningtrace'
