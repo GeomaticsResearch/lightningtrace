@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## version 0.2.2 (released 2017-07-05)
+Conda noarch: generic build
+
 ## version 0.2.1 (released 2017-07-05)
 Updated the setup.py download URL
 

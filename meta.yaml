@@ -1,6 +1,6 @@
 package:
   name: lightningtrace
-  version: "0.2.1"
+  version: "0.2.2"
 
 source:
   git_url: https://github.com/GeomaticsResearch/lightningtrace.git
@@ -8,7 +8,7 @@ source:
 
 requirements:
   build:
-    - python >=3
+    - python >=2.7
     - setuptools
     - pytest
     - rasterio
@@ -22,7 +22,10 @@ requirements:
     - matplotlib
     - shapely
     - geopandas
-    - python >=3
+    - python >=2.7
+
+build:
+  noarch: generic
 
 about:
   home: https://github.com/GeomaticsResearch/lightningtrace
