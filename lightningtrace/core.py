@@ -10,6 +10,7 @@ import rasterio
 
 from lightningtrace.utils import subset_raster, seq
 
+
 def _prepare_mpl_cntr(rast, band=1, bbox=None, logger=None):
     """
     :param rast: The rasterio raster object

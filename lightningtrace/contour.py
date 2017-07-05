@@ -5,6 +5,7 @@ import shapely
 import numpy as np
 from matplotlib import _cntr as cntr
 
+
 def extract_contours(band, affine, contours):
     """Contour the DEM for the contours given by variable contours and yield an iterable of GeoJson features.
 
