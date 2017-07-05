@@ -8,19 +8,21 @@ source:
 
 requirements:
   build:
-    - python
+    - python >=3
     - setuptools
     - pytest
     - rasterio
     - fiona
     - matplotlib
+    - geopandas
     - shapely
   run:
     - rasterio
     - fiona
     - matplotlib
     - shapely
-    - python
+    - geopandas
+    - python >=3
 
 about:
   home: https://github.com/GeomaticsResearch/lightningtrace
