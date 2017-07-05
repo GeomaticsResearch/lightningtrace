@@ -37,4 +37,4 @@ def test_numpy_world_to_pixel_transformation(dem_rast):
     ])
     res = lightningtrace.transformations.world_to_pixel_coords(dem_rast.affine, input_world_coords_np)
     # TODO: This isn't a real test. Find a better way to do it.
-    assert res.shape == (3,2)
+    assert res.shape == (3, 2)

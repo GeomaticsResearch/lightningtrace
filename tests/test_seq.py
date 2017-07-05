@@ -1,6 +1,7 @@
 import pytest
 import lightningtrace
 
+
 def test_seq_positive_integers():
     """
     Test to make sure that the sequence works with positive integers
