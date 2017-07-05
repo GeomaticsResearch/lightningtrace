@@ -9,8 +9,12 @@ config = {
     'url': 'https://github.com/GeomaticsResearch/lightningtrace',
     'download_url': 'Where to download it.',
     'author_email': 'mewald@geomaticsresearch.com',
-    'version': '0.1.1',
-    'install_requires': ['pytest', 'rasterio', 'fiona', 'matplotlib', 'shapely'],
+    'version': '0.2.0',
+    'install_requires': ['rasterio', 'fiona', 'matplotlib', 'shapely'],
+    'extras_require': {
+        'examples': ['geopandas',],
+        'tests': ['pytest',]
+    },
     'packages': ['lightningtrace'],
     'scripts': [],
     'name': 'lightningtrace',
