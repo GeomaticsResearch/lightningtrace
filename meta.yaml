@@ -1,0 +1,28 @@
+package:
+  name: lightningtrace
+  version: "0.2.0"
+
+source:
+  path: .
+#  git_url: https://github.com/GeomaticsResearch/lightningtrace.git
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - pytest
+    - rasterio
+    - fiona
+    - matplotlib
+    - shapely
+  run:
+    - rasterio
+    - fiona
+    - matplotlib
+    - shapely
+    - python
+
+about:
+  home: https://github.com/GeomaticsResearch/lightningtrace
+  license: MIT
+  license_file: LICENSE.txt
