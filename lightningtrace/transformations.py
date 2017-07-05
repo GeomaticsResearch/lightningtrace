@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def world_to_pixel_coords(affine, coords):
     """Convert a set of coordinates from world to pixel coordinates.
 

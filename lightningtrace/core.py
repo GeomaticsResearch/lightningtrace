@@ -126,89 +126,88 @@ def contour_dem(dem_fp, raster_band=1, min_val=None, max_val=None, method='basic
             raise ValueError('BBOX is not of length 4. Should be (xmin, ymin, xmax, ymax)')
 
     # Open the DEM and get metadata
-    with rasterio.drivers():
-        with rasterio.open(dem_fp, 'r') as src:
-            rast_crs = src.crs  # Get the CRS of the raster
+    with rasterio.open(dem_fp, 'r') as src:
+        rast_crs = src.crs  # Get the CRS of the raster
 
-            # Calculate min max if not set as a parameter
-            if min_val is None or max_val is None:
-                subset_obj = subset_raster(src, raster_band, bbox, logger)
-                if min_val is None:
-                    min_val = subset_obj['min']
-                if max_val is None:
-                    max_val = subset_obj['max']
-                subset_obj = None
+        # Calculate min max if not set as a parameter
+        if min_val is None or max_val is None:
+            subset_obj = subset_raster(src, raster_band, bbox, logger)
+            if min_val is None:
+                min_val = subset_obj['min']
+            if max_val is None:
+                max_val = subset_obj['max']
+            subset_obj = None
 
-            if method == 'basic':
-                if contour_interval is not None:
-                    if type(contour_interval) not in (float, int):
-                        logger.error("you must supply a float or int as a contour interval for the basic contouring method")
-                        raise ValueError("you must supply a float or int as a contour interval for the basic contouring method")
-                else:
-                    logger.error("you must provide a contour interval for the basic contouring method")
-                    raise ValueError("you must provide a contour interval for the basic contouring method")
-                n_contours = int((float(max_val) - float(min_val)) / float(contour_interval))
-                contour_list = seq(min_val, max_val, contour_interval)
-                logger.info("Using the 'basic' contouring method")
-                logger.info("min h: {0}; max h: {1}; interval: {2}; n levels: {3}".format(
-                        round(min_val, 2), round(max_val, 2), round(contour_interval, 2), n_contours))
-                logger.info('contours: ')
-                logger.info(contour_list)
-
-            elif method == 'step':
-                if (type(min_val) not in (float, int))\
-                        or (type(max_val) not in (float, int))\
-                        or (type(n_contours) not in (float, int)):
-                    logger.error("you must supply an int for parameter n_contours if running in 'step' mode")
-                    raise ValueError("you must supply an int for parameter n_contours if running in 'step' mode")
-                contour_interval = (float(max_val) - float(min_val)) / float(n_contours)
-                contour_list = seq(min_val, max_val, contour_interval)
-                logger.info("Using the 'step' contouring method")
-                logger.info("min h: {0}; max h: {1}; interval: {2}; n levels: {3}".format(
-                        round(min_val, 2), round(max_val, 2), round(contour_interval, 2), n_contours))
-                logger.info("Contours to generate: {0}".format(contour_list))
-
-            elif method == 'list':
-                if type(contour_list) not in (list, tuple):
-                    logger.error("you must supply a list or tuple of contours within parameter contour_list if running in 'list' mode")
-                    raise ValueError("you must supply a list or tuple of contours within parameter contour_list if running in 'list' mode")
-                contour_interval = None
-                n_contours = len(contour_list)
-                logger.info("Using the 'list' contouring method")
-                logger.info("min h: {0}; max h: {1}; interval: {2}; n levels: {3}".format(
-                        round(min_val, 2), round(max_val, 2), contour_interval, n_contours))
-                logger.info("Contours to generate: {0}".format(contour_list))
-
+        if method == 'basic':
+            if contour_interval is not None:
+                if type(contour_interval) not in (float, int):
+                    logger.error("you must supply a float or int as a contour interval for the basic contouring method")
+                    raise ValueError("you must supply a float or int as a contour interval for the basic contouring method")
             else:
-                logger.error("The contouring method '{0}' is not available. Please use 'basic', 'step', or 'list'".format(method))
-                raise NotImplementedError("The contouring method '{0}' is not available. Please use 'basic', 'step', or 'list'".format(method))
+                logger.error("you must provide a contour interval for the basic contouring method")
+                raise ValueError("you must provide a contour interval for the basic contouring method")
+            n_contours = int((float(max_val) - float(min_val)) / float(contour_interval))
+            contour_list = seq(min_val, max_val, contour_interval)
+            logger.info("Using the 'basic' contouring method")
+            logger.info("min h: {0}; max h: {1}; interval: {2}; n levels: {3}".format(
+                    round(min_val, 2), round(max_val, 2), round(contour_interval, 2), n_contours))
+            logger.info('contours: ')
+            logger.info(contour_list)
 
-            # Do the contouring
-            contour_results = list(_contour_mpl_worker(src, contour_list, band=raster_band, bbox=bbox, logger=logger))
+        elif method == 'step':
+            if (type(min_val) not in (float, int))\
+                    or (type(max_val) not in (float, int))\
+                    or (type(n_contours) not in (float, int)):
+                logger.error("you must supply an int for parameter n_contours if running in 'step' mode")
+                raise ValueError("you must supply an int for parameter n_contours if running in 'step' mode")
+            contour_interval = (float(max_val) - float(min_val)) / float(n_contours)
+            contour_list = seq(min_val, max_val, contour_interval)
+            logger.info("Using the 'step' contouring method")
+            logger.info("min h: {0}; max h: {1}; interval: {2}; n levels: {3}".format(
+                    round(min_val, 2), round(max_val, 2), round(contour_interval, 2), n_contours))
+            logger.info("Contours to generate: {0}".format(contour_list))
 
-            # Now loop through each contour
-            geojson = {
-                'type': 'FeatureCollection',
-                'features': list(),
-                'crs_wkt': rast_crs
-            }
-            feat_i = 0
-            for contour_elev, contour_geoms in contour_results:
-                for geom in contour_geoms:
-                    geojson['features'].append({
-                        'type': 'Feature',
-                        'geometry': mapping(geom),
-                        'properties': {
-                            'ID': feat_i,
-                            'elev': contour_elev,
-                        }
-                    })
-                    feat_i += 1
+        elif method == 'list':
+            if type(contour_list) not in (list, tuple):
+                logger.error("you must supply a list or tuple of contours within parameter contour_list if running in 'list' mode")
+                raise ValueError("you must supply a list or tuple of contours within parameter contour_list if running in 'list' mode")
+            contour_interval = None
+            n_contours = len(contour_list)
+            logger.info("Using the 'list' contouring method")
+            logger.info("min h: {0}; max h: {1}; interval: {2}; n levels: {3}".format(
+                    round(min_val, 2), round(max_val, 2), contour_interval, n_contours))
+            logger.info("Contours to generate: {0}".format(contour_list))
 
-            logger.info("Done contouring DEM.")
-            if output_format.lower() == 'features':
-                return geojson['features']
-            elif output_format.lower() == 'collection':
-                return geojson
-            else:
-                raise NotImplementedError("This output format is not supported. Please choose 'features' or 'collection' ")
+        else:
+            logger.error("The contouring method '{0}' is not available. Please use 'basic', 'step', or 'list'".format(method))
+            raise NotImplementedError("The contouring method '{0}' is not available. Please use 'basic', 'step', or 'list'".format(method))
+
+        # Do the contouring
+        contour_results = list(_contour_mpl_worker(src, contour_list, band=raster_band, bbox=bbox, logger=logger))
+
+        # Now loop through each contour
+        geojson = {
+            'type': 'FeatureCollection',
+            'features': list(),
+            'crs_wkt': rast_crs
+        }
+        feat_i = 0
+        for contour_elev, contour_geoms in contour_results:
+            for geom in contour_geoms:
+                geojson['features'].append({
+                    'type': 'Feature',
+                    'geometry': mapping(geom),
+                    'properties': {
+                        'ID': feat_i,
+                        'elev': contour_elev,
+                    }
+                })
+                feat_i += 1
+
+        logger.info("Done contouring DEM.")
+        if output_format.lower() == 'features':
+            return geojson['features']
+        elif output_format.lower() == 'collection':
+            return geojson
+        else:
+            raise NotImplementedError("This output format is not supported. Please choose 'features' or 'collection' ")

@@ -1,6 +1,7 @@
 import numpy as np
 from lightningtrace.transformations import world_to_pixel_coords
 
+
 def seq(start, stop, step=1):
     """Generate a list of values between start and stop every step
     :param start: The starting value
