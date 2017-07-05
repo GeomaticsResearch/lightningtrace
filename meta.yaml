@@ -3,8 +3,8 @@ package:
   version: "0.2.0"
 
 source:
-  path: .
-#  git_url: https://github.com/GeomaticsResearch/lightningtrace.git
+  git_url: https://github.com/GeomaticsResearch/lightningtrace.git
+#  path: .
 
 requirements:
   build:
