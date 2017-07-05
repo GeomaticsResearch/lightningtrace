@@ -15,7 +15,7 @@ with rasterio.open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dat
 
     # Create a Geopandas DataFrame from our contours
     df = gp.GeoDataFrame.from_features(contours, rast.crs)
-    print df.head()
+    print(df.head())
     df.to_file('contours.shp')
 
     bbox_bounds = 299000, 128000, 300000, 129300
@@ -24,6 +24,6 @@ with rasterio.open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dat
     )
     bbox_feat = {'geometry': shapely.geometry.mapping(bbox_geom), 'properties': {'fid': 1}}
     df_bbox = gp.GeoDataFrame.from_features([bbox_feat,], crs=rast.crs)
-    print df_bbox.head()
+    print(df_bbox.head())
     df_bbox.to_file('bbox.shp')
 
