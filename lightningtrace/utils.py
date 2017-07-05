@@ -69,9 +69,9 @@ def subset_raster(rast, band=1, bbox=None, logger=None):
           (min(window_cols), max(window_cols)))
         #window = (window_rows, window_cols)
 
-        print
-        print window[0]
-        print window[1]
+        print('')
+        print(window[0])
+        print(window[1])
 
 
         del kwargs['affine']
