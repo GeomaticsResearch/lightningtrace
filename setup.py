@@ -5,7 +5,7 @@ setup(
     author='Michael Ewald / GeomaticsResearch LLC',
     author_email='mewald@geomaticsresearch.com',
     url='https://github.com/GeomaticsResearch/lightningtrace',
-    version='0.2.3',
+    version='0.3.0',
     install_requires=[
         'rasterio', 'fiona', 'matplotlib', 'shapely'],
     license='MIT',
