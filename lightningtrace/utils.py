@@ -28,7 +28,7 @@ def subset_raster(rast, band=1, bbox=None, logger=None):
     # Affine transformations between raster and world coordinates.
     # See https://github.com/sgillies/affine
     # See https://github.com/mapbox/rasterio/blob/master/docs/windowed-rw.rst
-    a = rast.transform      # Convert from pixel coordinates to world coordinates
+    a = rast.affine      # Convert from pixel coordinates to world coordinates
     reverse_affine = ~a  # Convert from world coordinates to pixel coordinates
 
     # Copy the metadata
@@ -59,8 +59,8 @@ def subset_raster(rast, band=1, bbox=None, logger=None):
 
         # Convert the bounding box (world coordinates) to pixel coordinates
         # window = ((row_start, row_stop), (col_start, col_stop))
-        window_bl = world_to_pixel_coords(rast.transform, [(bbox[0], bbox[1]),])
-        window_tr = world_to_pixel_coords(rast.transform, [(bbox[2], bbox[3]),])
+        window_bl = world_to_pixel_coords(rast.affine, [(bbox[0], bbox[1]),])
+        window_tr = world_to_pixel_coords(rast.affine, [(bbox[2], bbox[3]),])
 
         window_rows = [int(window_bl[0, 1]), int(window_tr[0, 1])]
         window_cols = [int(window_bl[0, 0]), int(window_tr[0, 0])]
