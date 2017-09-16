@@ -5,11 +5,11 @@ setup(
     author='Michael Ewald / GeomaticsResearch LLC',
     author_email='mewald@geomaticsresearch.com',
     url='https://github.com/GeomaticsResearch/lightningtrace',
-    version='0.3.2',
+    version='0.3.3',
     install_requires=[
         'rasterio', 'fiona', 'matplotlib', 'shapely'],
     license='MIT',
-    packages=['lightningtrace', 'lightningtrace.contour', 'lightningtrace.core', 'lightningtrace.transformations', 'lightningtrace.utils'],
+    packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
